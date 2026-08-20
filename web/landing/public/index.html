@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>termshop — a photo editor that lives in your terminal</title>
+<meta name="description" content="Crop, curves, tone, straighten and batch-export photos without leaving your terminal. Kitty graphics, sixel, or half-blocks — auto-detected.">
+<style>
+:root {
+  --bg: #0c0e12; --panel: #14171e; --edge: #232833;
+  --fg: #d7dce4; --dim: #8b93a1; --acc: #ffb454; --acc2: #5ccfe6; --ok: #87d96c;
+}
+* { margin: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, sans-serif; }
+code, pre, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+a { color: var(--acc2); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.wrap { max-width: 1060px; margin: 0 auto; padding: 0 24px; }
+nav { display: flex; justify-content: space-between; align-items: center; padding: 22px 0; }
+.logo { font-weight: 700; font-size: 18px; color: var(--fg); }
+.logo span { color: var(--acc); }
+nav .links a { color: var(--dim); margin-left: 22px; font-size: 15px; }
+.hero { text-align: center; padding: 56px 0 36px; }
+.hero h1 { font-size: clamp(30px, 5.5vw, 52px); line-height: 1.15; letter-spacing: -0.02em; }
+.hero h1 em { font-style: normal; color: var(--acc); }
+.hero p.sub { color: var(--dim); font-size: 19px; max-width: 640px; margin: 18px auto 0; }
+.badges { margin-top: 14px; color: var(--dim); font-size: 14px; }
+.badges code { background: var(--panel); border: 1px solid var(--edge); border-radius: 6px; padding: 2px 9px; margin: 0 3px; }
+.installbar { display: flex; justify-content: center; margin-top: 30px; }
+.cmd { display: flex; align-items: center; gap: 14px; background: var(--panel); border: 1px solid var(--edge);
+  border-radius: 10px; padding: 14px 18px; font-size: 15px; max-width: 100%; overflow-x: auto; }
+.cmd .p { color: var(--ok); user-select: none; }
+.cmd button { background: var(--edge); color: var(--fg); border: 0; border-radius: 6px; padding: 6px 12px;
+  cursor: pointer; font-size: 13px; flex-shrink: 0; }
+.cmd button:hover { background: #2e3542; }
+.cta { margin-top: 22px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.btn { display: inline-block; padding: 11px 22px; border-radius: 9px; font-weight: 600; font-size: 15px; }
+.btn.primary { background: var(--acc); color: #1a1000; }
+.btn.primary:hover { background: #ffc57a; text-decoration: none; }
+.btn.ghost { border: 1px solid var(--edge); color: var(--fg); }
+.btn.ghost:hover { border-color: var(--dim); text-decoration: none; }
+.shot { margin: 52px auto 0; max-width: 980px; }
+.termframe { background: var(--panel); border: 1px solid var(--edge); border-radius: 12px; overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0,0,0,.5); }
+.termbar { display: flex; gap: 7px; padding: 11px 14px; border-bottom: 1px solid var(--edge); }
+.termbar i { width: 12px; height: 12px; border-radius: 50%; background: #3a4150; }
+.termbar i:nth-child(1) { background: #f2555a; } .termbar i:nth-child(2) { background: #f8bd45; } .termbar i:nth-child(3) { background: #58c25f; }
+.termframe img { display: block; width: 100%; }
+section { padding: 64px 0 8px; }
+section h2 { font-size: 26px; margin-bottom: 8px; }
+section p.lead { color: var(--dim); margin-bottom: 28px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.card { background: var(--panel); border: 1px solid var(--edge); border-radius: 10px; padding: 20px; }
+.card h3 { font-size: 16px; margin-bottom: 6px; color: var(--acc2); }
+.card p { color: var(--dim); font-size: 14.5px; }
+.card .k { color: var(--acc); font-family: ui-monospace, Menlo, monospace; font-size: 13px; }
+pre.block { background: var(--panel); border: 1px solid var(--edge); border-radius: 10px; padding: 18px 20px;
+  overflow-x: auto; font-size: 14px; line-height: 1.7; color: var(--fg); }
+pre.block .c { color: var(--dim); }
+pre.block .p { color: var(--ok); }
+table.extras { border-collapse: collapse; margin-top: 14px; font-size: 14.5px; }
+table.extras td { border: 1px solid var(--edge); padding: 8px 14px; }
+table.extras td:first-child { color: var(--dim); }
+footer { margin-top: 70px; border-top: 1px solid var(--edge); padding: 28px 0 40px; color: var(--dim); font-size: 14px;
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.demo-note { color: var(--dim); font-size: 13.5px; margin-top: 10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="logo">term<span>shop</span></div>
+    <div class="links">
+      <a href="#install">Install</a>
+      <a href="#features">Features</a>
+      <a href="#batch">Batch</a>
+      <a href="https://github.com/21prnv/termshop">GitHub</a>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <h1>A photo editor that<br>lives in <em>your terminal</em></h1>
+    <p class="sub">Crop with the mouse, drag tone curves with live preview, straighten horizons,
+       and batch-export whole folders — without ever leaving the terminal.</p>
+    <div class="badges"><code>macOS</code><code>Linux</code><code>Windows</code> · Python 3.10+ · MIT</div>
+    <div class="installbar">
+      <div class="cmd mono"><span class="p">$</span><span id="line">curl -fsSL https://21prnv.github.io/termshop/install | bash</span>
+        <button onclick="navigator.clipboard.writeText(document.getElementById('line').textContent).then(()=>{this.textContent='copied!';setTimeout(()=>this.textContent='copy',1400)})">copy</button>
+      </div>
+    </div>
+    <div class="cta">
+      <a class="btn primary" id="demo-btn" href="https://termshop-demo.pranavpatil6251.workers.dev">▶ Try it in your browser</a>
+      <a class="btn ghost" href="https://github.com/21prnv/termshop">Star on GitHub</a>
+    </div>
+    <p class="demo-note">The live demo runs the real app server-side — no install, sample photos included.</p>
+    <div class="shot">
+      <div class="termframe">
+        <img src="screenshot.png" alt="termshop editing a photo with the curves panel open" loading="lazy">
+      </div>
+    </div>
+  </div>
+
+  <section id="features">
+    <h2>Everything a quick edit needs</h2>
+    <p class="lead">Non-destructive by design: edits are an operation pipeline previewed on a downscaled copy and replayed at full resolution on save.</p>
+    <div class="grid">
+      <div class="card"><h3>Real pixels in the terminal</h3><p>Kitty graphics in kitty &amp; Ghostty, sixel in WezTerm/iTerm2, unicode half-blocks everywhere else — auto-detected.</p></div>
+      <div class="card"><h3>Curves editor</h3><p><span class="k">k</span> — Fritsch–Carlson monotone splines, per RGB channel, live histogram behind the plot, mouse-draggable points.</p></div>
+      <div class="card"><h3>Mouse crop + aspect lock</h3><p><span class="k">c</span> then drag; <span class="k">x</span> locks 1:1, 4:3, 3:2 or 16:9. Zoom in first to crop a detail exactly.</p></div>
+      <div class="card"><h3>Straighten</h3><p><span class="k">, .</span> tilt in 0.5° steps ( <span class="k">&lt; &gt;</span> for 0.1°) — black wedges are auto-cropped away.</p></div>
+      <div class="card"><h3>Culling workflow</h3><p><span class="k">[ ]</span> flip through a folder with per-photo history. Edits persist to a sidecar file across restarts.</p></div>
+      <div class="card"><h3>Clipboard in / out</h3><p><span class="k">V</span> paste a screenshot in, edit, <span class="k">Y</span> copy the full-res result back out.</p></div>
+    </div>
+  </section>
+
+  <section id="install">
+    <h2>Install</h2>
+    <p class="lead">One-liner on macOS/Linux, or any Python tool installer on all three platforms.</p>
+<pre class="block"><span class="c"># macOS / Linux</span>
+<span class="p">$</span> curl -fsSL https://21prnv.github.io/termshop/install | bash
+
+<span class="c"># or pick your tool (macOS / Linux / Windows)</span>
+<span class="p">$</span> uv tool install git+https://github.com/21prnv/termshop.git
+<span class="p">$</span> pipx install git+https://github.com/21prnv/termshop.git
+<span class="p">$</span> pip install git+https://github.com/21prnv/termshop.git
+
+<span class="c"># then</span>
+<span class="p">$</span> termshop photo.jpg
+<span class="p">$</span> termshop ~/Pictures</pre>
+    <table class="extras">
+      <tr><td>macOS clipboard paste</td><td class="mono">brew install pngpaste</td></tr>
+      <tr><td>Linux (Wayland)</td><td class="mono">wl-clipboard</td></tr>
+      <tr><td>Linux (X11)</td><td class="mono">xclip</td></tr>
+    </table>
+  </section>
+
+  <section id="batch">
+    <h2>Batch mode</h2>
+    <p class="lead">Edit interactively, export headlessly — or copy one photo's recipe onto hundreds.</p>
+<pre class="block"><span class="p">$</span> termshop --commit ~/Pictures --clear        <span class="c"># export all saved edits</span>
+<span class="p">$</span> termshop --apply best.jpg *.jpg             <span class="c"># reuse one photo's recipe</span>
+<span class="p">$</span> termshop --apply ops.json pics/ -o out/ --max-side 1600 --quality 80</pre>
+  </section>
+
+  <footer>
+    <div>MIT © 2026 Pranav Patil</div>
+    <div>built with <a href="https://textual.textualize.io">Textual</a> + <a href="https://python-pillow.org">Pillow</a> · <a href="https://github.com/21prnv/termshop">github.com/21prnv/termshop</a></div>
+  </footer>
+</div>
+</body>
+</html>

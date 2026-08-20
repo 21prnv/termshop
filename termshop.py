@@ -1490,6 +1490,36 @@ def resolve_renderer(choice):
     return None
 
 
+def web_main():
+    """Serve termshop to a web browser (needs the 'web' extra: textual-serve)."""
+    import argparse
+    import shlex
+    ap = argparse.ArgumentParser(
+        prog="termshop-web", description="run termshop in a web browser")
+    ap.add_argument("image", help="image file or directory to edit")
+    ap.add_argument("--host", default="localhost")
+    ap.add_argument("--port", type=int, default=8000)
+    ap.add_argument("--public-url", default=None,
+                    help="external origin when served behind a proxy/tunnel "
+                         "(e.g. https://demo.example.com) -- fixes asset and websocket URLs")
+    args = ap.parse_args()
+    path = Path(args.image).resolve()
+    if not path.exists():
+        print(f"error: {path} not found")
+        sys.exit(1)
+    try:
+        from textual_serve.server import Server
+    except ImportError:
+        print("error: needs textual-serve -- install with:\n"
+              "  pip install 'termshop[web]'   (or: pip install textual-serve)")
+        sys.exit(1)
+    # Web terminals speak rich text, not kitty graphics: force half-blocks.
+    cmd = f"{shlex.quote(sys.executable)} -m termshop {shlex.quote(str(path))} --renderer half"
+    print(f"serving termshop at http://{args.host}:{args.port}  (ctrl+c to stop)")
+    Server(cmd, host=args.host, port=args.port, title="termshop",
+           public_url=args.public_url).serve()
+
+
 def main():
     import argparse
     ap = argparse.ArgumentParser(

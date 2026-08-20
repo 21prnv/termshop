@@ -2,6 +2,10 @@
 
 **A photo editor that lives in your terminal.**
 
+**[Website](https://termshop.pranavpatil6251.workers.dev)** · **[▶ Try it in your browser](https://termshop-demo.pranavpatil6251.workers.dev)** · no install needed
+
+![termshop editing a photo with the curves panel open](docs/screenshot.svg)
+
 `macOS` · `Linux` · `Windows` — Python 3.10+
 
 Open a real photo in your terminal, crop it with the mouse, drag tone curves
@@ -72,6 +76,15 @@ works via half-blocks; force a backend with `--renderer tgp|sixel|half`.
 
 The sidebar shows a live RGB histogram, the op history, and your position in
 the directory. Unsaved edits survive restarts via the sidecar.
+
+## Run it in a browser
+
+    pip install 'termshop[web]'
+    termshop-web ~/Pictures            # http://localhost:8000
+
+Serves the real app over a websocket (textual-serve). `--host`, `--port`, and
+`--public-url` (for reverse proxies) are supported. The hosted demo runs this
+in a Cloudflare Container — see `web/` for the full deploy setup.
 
 ## Batch mode
 

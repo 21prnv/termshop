@@ -1,0 +1,17 @@
+{
+  "name": "termshop-demo",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-01",
+  "containers": [
+    {
+      "class_name": "TermshopDemo",
+      "image": "./Dockerfile",
+      "image_build_context": "../..",
+      "max_instances": 2
+    }
+  ],
+  "durable_objects": {
+    "bindings": [{ "name": "TERMSHOP_DEMO", "class_name": "TermshopDemo" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["TermshopDemo"] }]
+}

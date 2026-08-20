@@ -27,12 +27,16 @@ dependencies = [
     "textual-image>=0.8",
 ]
 
+[project.optional-dependencies]
+web = ["textual-serve>=1.0"]
+
 [project.urls]
 Homepage = "https://github.com/21prnv/termshop"
 Issues = "https://github.com/21prnv/termshop/issues"
 
 [project.scripts]
 termshop = "termshop:main"
+termshop-web = "termshop:web_main"
 
 [tool.setuptools]
 py-modules = ["termshop"]

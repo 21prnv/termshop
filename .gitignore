@@ -8,3 +8,6 @@ tests/export_test.png
 dist/
 build/
 *.egg-info/
+web/demo/node_modules/
+web/demo/.wrangler/
+web/landing/.wrangler/
