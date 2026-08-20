@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "termshop"
+version = "0.1.0"
+description = "A photo editor that lives in your terminal - crop, curves, tone, straighten, batch export"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Pranav Patil" }]
+requires-python = ">=3.10"
+keywords = ["terminal", "tui", "photo", "image", "editor", "kitty", "sixel", "textual"]
+classifiers = [
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Topic :: Multimedia :: Graphics :: Editors",
+]
+dependencies = [
+    "pillow>=10",
+    "textual>=0.80",
+    "textual-image>=0.8",
+]
+
+[project.urls]
+Homepage = "https://github.com/21prnv/termshop"
+Issues = "https://github.com/21prnv/termshop/issues"
+
+[project.scripts]
+termshop = "termshop:main"
+
+[tool.setuptools]
+py-modules = ["termshop"]

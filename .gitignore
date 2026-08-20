@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.termshop.json
+tests/sample_edited.jpg
+tests/pasted_*.png
+tests/export_test.png
+dist/
+build/
+*.egg-info/
