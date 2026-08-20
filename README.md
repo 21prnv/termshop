@@ -2,7 +2,7 @@
 
 **A photo editor that lives in your terminal.**
 
-**[Website](https://termshop.pranavpatil6251.workers.dev)** · **[▶ Try it in your browser](https://termshop-demo.pranavpatil6251.workers.dev)** · no install needed
+**[Website](https://termshop.pranavpatil6251.workers.dev)**
 
 ![termshop editing a photo with the curves panel open](docs/screenshot.svg)
 
@@ -83,8 +83,7 @@ the directory. Unsaved edits survive restarts via the sidecar.
     termshop-web ~/Pictures            # http://localhost:8000
 
 Serves the real app over a websocket (textual-serve). `--host`, `--port`, and
-`--public-url` (for reverse proxies) are supported. The hosted demo runs this
-in a Cloudflare Container — see `web/` for the full deploy setup.
+`--public-url` (for reverse proxies) are supported.
 
 ## Batch mode
 

@@ -1,5 +1,0 @@
-{
-  "name": "termshop-demo",
-  "private": true,
-  "dependencies": { "@cloudflare/containers": "^0.0.28" }
-}
