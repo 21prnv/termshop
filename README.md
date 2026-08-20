@@ -25,7 +25,7 @@ GUI, no Electron, just a terminal.
 
 One-liner (macOS / Linux):
 
-    curl -fsSL https://raw.githubusercontent.com/21prnv/termshop/main/install.sh | bash
+    curl -fsSL https://21prnv.github.io/termshop/install | bash
 
 Or pick your tool (all platforms, including Windows):
 
